@@ -1,8 +1,4 @@
-import { createClient } from "@supabase/supabase-js"
 import { createServerClient } from "./supabase"
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
 
 // Tipos para facilitar o uso
 export interface EnginePackage {
@@ -172,11 +168,6 @@ export interface MarketingWarranty {
 }
 
 export class DatabaseService {
-  private supabase
-
-  constructor() {
-    this.supabase = createClient(supabaseUrl, supabaseKey)
-  }
 
   // Helper method to handle Supabase errors
   private static handleSupabaseError(error: any, operation: string) {
@@ -1311,9 +1302,10 @@ export class DatabaseService {
   }
 
   // CRUD for Marketing Manuals
-  async getMarketingManuals(): Promise<MarketingManual[]> {
+  static async getMarketingManuals(): Promise<MarketingManual[]> {
+    const supabase = createServerClient()
     try {
-      const { data, error } = await this.supabase
+      const { data, error } = await supabase
         .from("marketing_manuals")
         .select("*")
         .order("display_order", { ascending: true })
@@ -1329,11 +1321,12 @@ export class DatabaseService {
     }
   }
 
-  async saveMarketingManual(manual: MarketingManual): Promise<MarketingManual> {
+  static async saveMarketingManual(manual: MarketingManual): Promise<MarketingManual> {
+    const supabase = createServerClient()
     try {
       if (manual.id) {
         // Update existing manual
-        const { data, error } = await this.supabase
+        const { data, error } = await supabase
           .from("marketing_manuals")
           .update({
             name_en: manual.name_en,
@@ -1354,7 +1347,7 @@ export class DatabaseService {
         return data
       } else {
         // Create new manual
-        const { data, error } = await this.supabase
+        const { data, error } = await supabase
           .from("marketing_manuals")
           .insert({
             name_en: manual.name_en,
@@ -1378,9 +1371,10 @@ export class DatabaseService {
     }
   }
 
-  async deleteMarketingManual(id: number): Promise<void> {
+  static async deleteMarketingManual(id: number): Promise<void> {
+    const supabase = createServerClient()
     try {
-      const { error } = await this.supabase.from("marketing_manuals").delete().eq("id", id)
+      const { error } = await supabase.from("marketing_manuals").delete().eq("id", id)
 
       if (error) {
         DatabaseService.handleSupabaseError(error, "deleteMarketingManual")
@@ -1391,9 +1385,10 @@ export class DatabaseService {
   }
 
   // CRUD for Marketing Warranties
-  async getMarketingWarranties(): Promise<MarketingWarranty[]> {
+  static async getMarketingWarranties(): Promise<MarketingWarranty[]> {
+    const supabase = createServerClient()
     try {
-      const { data, error } = await this.supabase
+      const { data, error } = await supabase
         .from("marketing_warranties")
         .select("*")
         .order("display_order", { ascending: true })
@@ -1409,11 +1404,12 @@ export class DatabaseService {
     }
   }
 
-  async saveMarketingWarranty(warranty: MarketingWarranty): Promise<MarketingWarranty> {
+  static async saveMarketingWarranty(warranty: MarketingWarranty): Promise<MarketingWarranty> {
+    const supabase = createServerClient()
     try {
       if (warranty.id) {
         // Update existing warranty
-        const { data, error } = await this.supabase
+        const { data, error } = await supabase
           .from("marketing_warranties")
           .update({
             name_en: warranty.name_en,
@@ -1434,7 +1430,7 @@ export class DatabaseService {
         return data
       } else {
         // Create new warranty
-        const { data, error } = await this.supabase
+        const { data, error } = await supabase
           .from("marketing_warranties")
           .insert({
             name_en: warranty.name_en,
@@ -1458,9 +1454,10 @@ export class DatabaseService {
     }
   }
 
-  async deleteMarketingWarranty(id: number): Promise<void> {
+  static async deleteMarketingWarranty(id: number): Promise<void> {
+    const supabase = createServerClient()
     try {
-      const { error } = await this.supabase.from("marketing_warranties").delete().eq("id", id)
+      const { error } = await supabase.from("marketing_warranties").delete().eq("id", id)
 
       if (error) {
         DatabaseService.handleSupabaseError(error, "deleteMarketingWarranty")

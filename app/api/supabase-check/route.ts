@@ -1,15 +1,9 @@
 import { NextResponse } from "next/server"
-import { createClient } from "@supabase/supabase-js"
-
-const supabase = createClient(
-  // URL pública continua a mesma
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  // No servidor podemos (e devemos) usar a service role
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-)
+import { createServerClient } from "@/lib/supabase"
 
 export async function GET() {
   try {
+    const supabase = createServerClient()
     // Teste simples: selecionar 1 linha da tabela dealers
     const { error } = await supabase.from("dealers").select("id").limit(1)
 

@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server"
-import { createClient } from "@supabase/supabase-js"
-
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+import { createServerClient } from "@/lib/supabase"
 
 export async function GET(request: Request) {
   try {
+    const supabase = createServerClient()
     const { searchParams } = new URL(request.url)
     const dealerId = searchParams.get("dealer_id")
 
@@ -38,6 +37,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const supabase = createServerClient()
     const body = await request.json()
     const { dealer_id, item_type, item_id, item_name, sale_price_usd, sale_price_brl, margin_percentage } = body
 
@@ -130,6 +130,7 @@ export async function POST(request: Request) {
 
 export async function DELETE(request: Request) {
   try {
+    const supabase = createServerClient()
     const { searchParams } = new URL(request.url)
     const id = searchParams.get("id")
     const dealerId = searchParams.get("dealer_id")

@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server"
-import { createClient } from "@supabase/supabase-js"
-
-// ESTA rota só roda no servidor – a Service Role Key nunca vai para o cliente
-const supabaseAdmin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+import { createServerClient } from "@/lib/supabase"
 
 export async function POST() {
   try {
+    const supabaseAdmin = createServerClient()
     // ---------- sample data ----------
     const sample = {
       engine_packages: [
